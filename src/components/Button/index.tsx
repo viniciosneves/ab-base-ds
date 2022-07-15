@@ -1,27 +1,38 @@
 import React from "react"
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export interface ButtonProps {
-    text: string,
+    text?: string,
     onClick?: (evento: React.MouseEvent) => void
+    context: 'primary' | 'secondary'
 }
 
-const ButtonStyled = styled.button`
-    background-color: #EB9B00;
+const ButtonStyled = styled.button<ButtonProps>`
     padding: 16px 24px;
-    color: #FFF;
     font-size: 20px;
     line-height: 30px;
-    border: none;
     cursor: pointer;
-    &:hover {
-        color: #002F52;
+    border: 2px solid #EB9B00;
+    background-color: ${ (props: ButtonProps) => props.context === 'secondary' ? 'transparent' : '#EB9B00' };
+    color: ${ (props: ButtonProps) => props.context === 'secondary' ? '#EB9B00' : '#FFF' };
+    ${ (props: ButtonProps) => props.context === 'secondary' 
+        ? css`
+            &:hover {
+                color: #FFF;
+                background-color: #EB9B00;
+            }
+        ` 
+        : css`
+            &:hover {
+                color: #002F52;
+            }
+        ` 
     }
 `
 
-export const Button = ({ text, onClick }: ButtonProps) => {
+export const Button = ({ text, onClick, context = 'primary' }: ButtonProps) => {
     return (
-        <ButtonStyled onClick={onClick} className="ab-btn">
+        <ButtonStyled context={context} onClick={onClick}>
             {text}
         </ButtonStyled>
     )
